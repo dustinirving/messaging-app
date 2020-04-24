@@ -51,6 +51,7 @@ $sendButton.addEventListener("click", function () {
   // Making a Post request
   $.post("/api/messages", newMessageObject).then(function (data) {
     clearMessages();
+    renderDOM();
   });
 });
 
@@ -74,6 +75,7 @@ document.addEventListener("keyup", function (e) {
       // Making a Post request
       $.post("/api/messages", newMessageObject).then(function (data) {
         clearMessages();
+        renderDOM();
       });
     }
   }
