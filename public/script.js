@@ -17,7 +17,7 @@ function renderDOM() {
   });
 }
 
-setTimeout(renderDOM(), 1000);
+renderDOM();
 
 let deleteMessages = function () {
   return $.ajax({
