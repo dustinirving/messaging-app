@@ -38,3 +38,12 @@ app.post("/api/messages", function (req, res) {
   });
   res.json(newMessage);
 });
+
+app.delete("/api/messages", function (req, res) {
+  console.log("hi");
+  let data = "[]";
+  fs.writeFile("./db/db.json", data, function (err) {
+    if (err) throw err;
+  });
+  return res.json(data);
+});

@@ -1,6 +1,7 @@
 let $sendButton = document.getElementById("send-button");
 let $textInput = document.getElementById("text-input");
 let $messages = document.getElementById("messages");
+let $clearButton = document.getElementById("clear-button");
 
 // Render the DOM when the page is loaded
 function renderDOM() {
@@ -18,6 +19,22 @@ function renderDOM() {
 
 renderDOM();
 
+let deleteMessages = function () {
+  return $.ajax({
+    url: "api/messages/",
+    method: "DELETE",
+  });
+};
+
+function clearMessages() {
+  $messages.textContent = "";
+}
+
+$clearButton.addEventListener("click", function () {
+  clearMessages();
+  deleteMessages();
+});
+
 $sendButton.addEventListener("click", function () {
   // Setting a new object
   let newMessageObject = {
@@ -33,7 +50,7 @@ $sendButton.addEventListener("click", function () {
 
   // Making a Post request
   $.post("/api/messages", newMessageObject).then(function (data) {
-    $messages.textContent = "";
+    clearMessages();
     renderDOM();
   });
 });
@@ -57,7 +74,7 @@ document.addEventListener("keyup", function (e) {
 
       // Making a Post request
       $.post("/api/messages", newMessageObject).then(function (data) {
-        $messages.textContent = "";
+        clearMessages();
         renderDOM();
       });
     }
