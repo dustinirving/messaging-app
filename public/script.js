@@ -49,10 +49,7 @@ $sendButton.addEventListener("click", function () {
   $textInput.value = "";
 
   // Making a Post request
-  $.post("/api/messages", newMessageObject).then(function (data) {
-    clearMessages();
-    renderDOM();
-  });
+  $.post("/api/messages", newMessageObject).then(function (data) {});
 });
 
 document.addEventListener("keyup", function (e) {
