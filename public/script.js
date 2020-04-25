@@ -1,8 +1,9 @@
-let $sendButton = document.getElementById("send-button");
-let $textInput = document.getElementById("text-input");
-let $messages = document.getElementById("messages");
-let $clearButton = document.getElementById("clear-button");
-let $sendForm = document.getElementById("send-form");
+const $sendButton = document.getElementById("send-button");
+const $textInput = document.getElementById("text-input");
+const $messages = document.getElementById("messages");
+const $clearButton = document.getElementById("clear-button");
+const $sendForm = document.getElementById("send-form");
+const $messagesDiv = document.getElementById("messages-div");
 const socket = io();
 
 renderDOM();
@@ -105,4 +106,5 @@ $sendForm.addEventListener("submit", (e) => {
 
 socket.on("message", (msg) => {
   sendMessage(msg);
+  $messagesDiv.scrollTop = $messagesDiv.scrollHeight;
 });
