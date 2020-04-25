@@ -9,21 +9,31 @@
   </head>
   <body>
     <div class="container">
-      <div class="messages-div" id="messages-div">
-        <ul class="messages" id="messages"></ul>
-      </div>
-
-      <form class="send-form" id="send-form">
-        <input type="text" id="text-input" class="text-input"></input>
-        <button type="submit" id="send-button" class="send-button">Send</button>
-      </form>
-      <div class="clear-messages">
-        <button class="clear-button" id="clear-button">
-          Clear Messages
-        </button>
+      <div class="info">
+        <h1 class="title">Dusty's Chatroom</h1>
+        <form action="" id="enter-form">
+          <div class="name">
+            <label class="label-name" for="name">Name </label>
+            <input class="input-name" id="name" type="text" />
+          </div>
+          <button class="enter" id="enter">Enter Chatroom</button>
+        </form>
       </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
+    <script>
+      // Landing page
+      const $enterForm = document.getElementById("enter-form");
+      const $name = document.getElementById("name");
+
+      $enterForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let username = $name.value;
+        JSON.stringify(username);
+        localStorage.setItem("username", username);
+        window.location.href = "chatroom.html";
+        renderDOM();
+      });
+    </script>
   </body>
 </html>

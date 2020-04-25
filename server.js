@@ -35,6 +35,10 @@ app.use(express.json());
 
 server.listen(PORT);
 
+app.get("/chatroom", function (req, res) {
+  res.sendFile(path.join(__dirname, "./public/chatroom.html"));
+});
+
 app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "./public/index.html"));
 });

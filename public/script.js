@@ -1,12 +1,13 @@
+let username = localStorage.getItem("username");
+// Chatroom
 const $sendButton = document.getElementById("send-button");
 const $textInput = document.getElementById("text-input");
 const $messages = document.getElementById("messages");
 const $clearButton = document.getElementById("clear-button");
 const $sendForm = document.getElementById("send-form");
 const $messagesDiv = document.getElementById("messages-div");
+const $username = document.getElementById("");
 const socket = io();
-
-renderDOM();
 
 // Render the DOM when the page is loaded
 function renderDOM() {
@@ -15,12 +16,14 @@ function renderDOM() {
       if (messages) {
         let newMessage = document.createElement("LI");
         $messages.appendChild(newMessage);
-        newMessage.textContent = message.message;
+        newMessage.innerHTML = `<div class="message-name"> ${message.username} </div> <div> ${message.message}</div>`;
         newMessage.classList.add("message");
       }
     }
   });
 }
+
+renderDOM();
 
 let deleteMessages = function () {
   return $.ajax({
@@ -38,55 +41,11 @@ $clearButton.addEventListener("click", function () {
   deleteMessages();
 });
 
-// $sendButton.addEventListener("click", function () {
-//   // Setting a new object
-//   let newMessageObject = {
-//     message: $textInput.value,
-//   };
-//   console.log(newMessageObject);
-//   // Update the DOM
-//   let newMessage = document.createElement("LI");
-//   $messages.appendChild(newMessage);
-//   newMessage.textContent = $textInput.value;
-//   newMessage.classList.add("message");
-//   $textInput.value = "";
-
-//   // Making a Post request
-//   $.post("/api/messages", newMessageObject).then(function (data) {});
-// });
-
-// document.addEventListener("keyup", function (e) {
-//   const msg = $textInput.value;
-
-//   // Setting a new object
-//   let newMessageObject = {
-//     message: $textInput.value,
-//   };
-
-//   if (e.keyCode == 13) {
-//     if (e.shiftKey) {
-//       // new line
-//     } else {
-//       let newMessage = document.createElement("LI");
-//       console.log(newMessage);
-//       $messages.appendChild(newMessage);
-//       newMessage.textContent = $textInput.value;
-//       newMessage.classList.add("message");
-//       $textInput.value = "";
-
-//       // Making a Post request
-//       $.post("/api/messages", newMessageObject).then(function (data) {});
-
-//       socket.emit("chatMessage", msg);
-//     }
-//   }
-// });
-
 function sendMessage(msg) {
   // Update the DOM
   const newMessage = document.createElement("LI");
   $messages.appendChild(newMessage);
-  newMessage.textContent = msg;
+  newMessage.innerHTML = `<div class="message-name"> ${msg.username} </div> <div> ${msg.message}</div>`;
   newMessage.classList.add("message");
   $textInput.value = "";
 }
@@ -94,13 +53,18 @@ function sendMessage(msg) {
 $sendForm.addEventListener("submit", (e) => {
   e.preventDefault();
   let newMessageObject = {
+    username: username,
     message: $textInput.value,
   };
   // Making a Post request
   $.post("/api/messages", newMessageObject).then(function (data) {});
 
   // Real Time
-  const msg = $textInput.value;
+  const msg = {
+    username: username,
+    message: $textInput.value,
+  };
+
   socket.emit("chatMessage", msg);
 });
 
