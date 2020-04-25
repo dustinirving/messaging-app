@@ -2,19 +2,38 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const uuid = require("uuid");
+const http = require("http");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+// Real time
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
+
+io.on("connection", (socket) => {
+  // socket.emit("message", "A user has joined the chat");
+
+  // socket.broadcast.emit("message", "A user has joined the chat");
+
+  // socket.on("disconnect", () => {
+  //   io.emit("message", "A user has left the chat");
+  // });
+
+  socket.on("chatMessage", (msg) => {
+    io.emit("message", msg);
+  });
+});
+
 // Allows the server to talk to the client
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(path.join(__dirname + "/public")));
 // Fortmatting
 app.use(express.urlencoded({ extended: true }));
 // Use json format with express
 app.use(express.json());
 
-app.listen(PORT, () => console.log(`App is listening at PORT ${PORT}`));
+server.listen(PORT);
 
 app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "./public/index.html"));

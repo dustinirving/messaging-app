@@ -2,6 +2,10 @@ let $sendButton = document.getElementById("send-button");
 let $textInput = document.getElementById("text-input");
 let $messages = document.getElementById("messages");
 let $clearButton = document.getElementById("clear-button");
+let $sendForm = document.getElementById("send-form");
+const socket = io();
+
+renderDOM();
 
 // Render the DOM when the page is loaded
 function renderDOM() {
@@ -16,8 +20,6 @@ function renderDOM() {
     }
   });
 }
-
-renderDOM();
 
 let deleteMessages = function () {
   return $.ajax({
@@ -35,45 +37,72 @@ $clearButton.addEventListener("click", function () {
   deleteMessages();
 });
 
-$sendButton.addEventListener("click", function () {
-  // Setting a new object
-  let newMessageObject = {
-    message: $textInput.value,
-  };
-  console.log(newMessageObject);
+// $sendButton.addEventListener("click", function () {
+//   // Setting a new object
+//   let newMessageObject = {
+//     message: $textInput.value,
+//   };
+//   console.log(newMessageObject);
+//   // Update the DOM
+//   let newMessage = document.createElement("LI");
+//   $messages.appendChild(newMessage);
+//   newMessage.textContent = $textInput.value;
+//   newMessage.classList.add("message");
+//   $textInput.value = "";
+
+//   // Making a Post request
+//   $.post("/api/messages", newMessageObject).then(function (data) {});
+// });
+
+// document.addEventListener("keyup", function (e) {
+//   const msg = $textInput.value;
+
+//   // Setting a new object
+//   let newMessageObject = {
+//     message: $textInput.value,
+//   };
+
+//   if (e.keyCode == 13) {
+//     if (e.shiftKey) {
+//       // new line
+//     } else {
+//       let newMessage = document.createElement("LI");
+//       console.log(newMessage);
+//       $messages.appendChild(newMessage);
+//       newMessage.textContent = $textInput.value;
+//       newMessage.classList.add("message");
+//       $textInput.value = "";
+
+//       // Making a Post request
+//       $.post("/api/messages", newMessageObject).then(function (data) {});
+
+//       socket.emit("chatMessage", msg);
+//     }
+//   }
+// });
+
+function sendMessage(msg) {
   // Update the DOM
-  let newMessage = document.createElement("LI");
+  const newMessage = document.createElement("LI");
   $messages.appendChild(newMessage);
-  newMessage.textContent = $textInput.value;
+  newMessage.textContent = msg;
   newMessage.classList.add("message");
   $textInput.value = "";
+}
 
-  // Making a Post request
-  $.post("/api/messages", newMessageObject).then(function (data) {});
-});
-
-document.addEventListener("keyup", function (e) {
-  // Setting a new object
+$sendForm.addEventListener("submit", (e) => {
+  e.preventDefault();
   let newMessageObject = {
     message: $textInput.value,
   };
+  // Making a Post request
+  $.post("/api/messages", newMessageObject).then(function (data) {});
 
-  if (e.keyCode == 13) {
-    if (e.shiftKey) {
-      // new line
-    } else {
-      let newMessage = document.createElement("LI");
-      console.log(newMessage);
-      $messages.appendChild(newMessage);
-      newMessage.textContent = $textInput.value;
-      newMessage.classList.add("message");
-      $textInput.value = "";
+  // Real Time
+  const msg = $textInput.value;
+  socket.emit("chatMessage", msg);
+});
 
-      // Making a Post request
-      $.post("/api/messages", newMessageObject).then(function (data) {
-        clearMessages();
-        renderDOM();
-      });
-    }
-  }
+socket.on("message", (msg) => {
+  sendMessage(msg);
 });

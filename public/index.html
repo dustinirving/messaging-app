@@ -13,14 +13,17 @@
         <ul class="messages" id="messages"></ul>
       </div>
 
-      <div class="send-div">
-        <textarea id="text-input" class="text-area"></textarea>
-        <button id="send-button" class="send-button">Send</button>
-      </div>
+      <form class="send-form" id="send-form">
+        <input type="text" id="text-input" class="text-input"></input>
+        <button type="submit" id="send-button" class="send-button">Send</button>
+      </form>
       <div class="clear-messages">
-        <button class="clear-button" id="clear-button">Clear Messages</button>
+        <button class="clear-button" id="clear-button">
+          Clear Messages
+        </button>
       </div>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
